@@ -12,9 +12,9 @@ def conectaWiFi (red, password):
     global miRed
     miRed = network.WLAN(network.STA_IF)
     if not miRed.isconnected():
-        miRed.active(True)
-        miRed.connect(red, password)
-        print('Conectando la red', red +"...")
+        miRed.active (True)
+        miRed.connect (red, password)
+        print ('Conectando la red', red +"...")
         timeout = time.time ()
         while not miRed.isconnected():
             #wdt.feed ()
@@ -22,18 +22,16 @@ def conectaWiFi (red, password):
                 return False
     return True
 
-while (1):
+while (True):
 
     sensorTH.measure ()  #Mide
     
-    temp = sensorTH.temperature()
+    temp = sensorTH.temperature ()
     hum = sensorTH.humidity ()
     
     print (temp,"grados")
     print (hum,"%")
-    time.sleep (300)
  
-    #try:
     conectaWiFi (red, password)
     
     url = "https://industrial.api.ubidots.com/api/v1.6/devices/raspberry-pico/"
@@ -43,14 +41,10 @@ while (1):
         "Humedad": hum
     }
     
-    respuesta = urequests.post(url, headers = {'content-type': 'application/json', 'X-Auth-Token':token}, data=ujson.dumps(payload))
-        
-    print(respuesta.text)
+    respuesta = urequests.post (url, headers = {'content-type': 'application/json', 'X-Auth-Token':token}, data=ujson.dumps(payload))
+
     print (respuesta.status_code)
     respuesta.close ()
 
-    #except:
-            
-        #print ("Error!")
-        #machine.reset ()
-        
+    time.sleep (30)
+    
